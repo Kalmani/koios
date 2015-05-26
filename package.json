@@ -2,7 +2,6 @@
   "name": "koios",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -10,10 +9,17 @@
     "type": "git",
     "url": "https://github.com/Kalmani/koios"
   },
+  "dependencies": {
+    "mootools": "^1.5.1",
+    "mootools-more": "^1.5.1"
+  },
   "author": "Florent Kolosowski",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/Kalmani/koios/issues"
   },
-  "homepage": "https://github.com/Kalmani/koios"
+  "homepage": "https://github.com/Kalmani/koios",
+  "bin": {
+    "koios": "main.js"
+  }
 }
