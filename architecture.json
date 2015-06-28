@@ -1,3 +1,14 @@
 {
-  
+  "www" : [
+	"pages" : [
+		"components" : [
+		],
+		"globales" : [
+		]
+	],
+	"theme : [
+	],
+	"vendor" : [
+	]
+  ]
 }
