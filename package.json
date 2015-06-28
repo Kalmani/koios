@@ -12,7 +12,8 @@
   "dependencies": {
     "mootools": "^1.5.1",
     "mootools-more": "^1.5.1",
-    "prompt" : "^0.2.14"
+    "prompt" : "^0.2.14",
+    "fs-extra" : "^0.20.1"
   },
   "devDependencies": {
     "glob": "^4.3.5",

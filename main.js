@@ -1,7 +1,7 @@
 #! /usr/bin/env node
 
 require('mootools');
-var fs = require('fs'),
+var fs = require('fs-extra'),
     path = require('path'),
     prompt = require('prompt');
 
@@ -51,8 +51,6 @@ var Koios = new Class({
             });
             self.dive_arch(architecture, './');
             console.log('Project has been reset');
-          } else {
-            console.log('do nothing');
           }
         });
     }
@@ -75,10 +73,16 @@ var Koios = new Class({
 
   dive_arch : function(architecture, parent) {
     var self = this;
-    Object.each(architecture, function(sub, folder) {
-      self.mkdirSync(parent + folder);
-      tmp_parent = parent + folder + '/';
-      self.dive_arch(sub, tmp_parent);
+    Object.each(architecture, function(sub, folder) {;
+      if (sub !== 'file') {
+        self.mkdirSync(parent + folder);
+        tmp_parent = parent + folder + '/';
+        self.dive_arch(sub, tmp_parent);
+      } else {
+        fs.copy(__dirname + '/files/' + folder, parent + '/' + folder, function (err) {
+          if (err) return console.error(err)
+        });
+      }
     });
   },
 

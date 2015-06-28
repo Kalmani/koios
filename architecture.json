@@ -2,9 +2,14 @@
   "www" : {
 		"pages" : {
 			"components" : {
+				"home" : {
+					"homeScreen.js" : "file",
+					"homeTpl.xml" : "file"
+				}
 			},
 			"globales" : {
-			}
+			},
+			"main_app.js" : "file"
 		},
 		"theme" : {
 			"imgs" : {
