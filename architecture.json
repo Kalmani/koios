@@ -1,14 +1,16 @@
 {
-  "www" : [
-	"pages" : [
-		"components" : [
-		],
-		"globales" : [
-		]
-	],
-	"theme : [
-	],
-	"vendor" : [
-	]
-  ]
+  "www" : {
+		"pages" : {
+			"components" : {
+			},
+			"globales" : {
+			}
+		},
+		"theme" : {
+			"imgs" : {
+			}
+		},
+		"vendor" : {
+		}
+  }
 }
