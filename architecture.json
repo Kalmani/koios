@@ -1,47 +1,55 @@
 {
+  "manifest.json" : "file",
   "www" : {
-		"app" : {
-			"components" : {
-				"home" : {
-					"homeScreen.js" : "file",
-					"homeTpl.xml" : "file"
-				}
-			},
-			"globales" : {
-				"ScreenManager.js" : "file",
-				"session.js" : "file"
-			},
-			"main_app.js" : "file"
-		},
-		"theme" : {
-			"imgs" : {
-			}
-		},
-		"vendor" : {
-			"mustache.js" : "file"
-		},
-		"index.html" : "file",
-		"locales.json" : "file"
+    "app" : {
+      "components" : {
+        "home" : {
+          "homeScreen.js" : "file",
+          "homeTpl.xml" : "file"
+        }
+      },
+      "globales" : {
+        "ScreenManager.js" : "file",
+        "session.js" : "file"
+      },
+      "main_app.js" : "file",
+      "main_tpl.xml" : "file",
+      "init.js" : "file"
+    },
+    "theme" : {
+      "_main.css" : "file",
+      "stylesheet.css" : "file",
+      "imgs" : {
+      }
+    },
+    "vendor" : {
+      "mustache"  : "library",
+      "mootools"  : "library",
+      "prototype" : "library"
+    },
+    "index.html" : "file",
+    "locales.json" : "file"
   },
   "grunt" : {
-	"concat" : {
-		"scripts.js" : "file",
-		"templates.js" : "file"
-	},
-	"config.js"  : "file",
-	"cssmin.js"  : "file",
-	"jsc.js"     : "file",
-	"jscsrc.js"  : "file",
-	"jshint.js"  : "file",
-	"statics.js" : "file",
-	"watch.js"   : "file"
+  "concat" : {
+    "scripts.js" : "file",
+    "templates.js" : "file"
+  },
+  "config.js"  : "file",
+  "cssmin.js"  : "file",
+  "jsc.js"     : "file",
+  "jscsrc.js"  : "file",
+  "jshint.js"  : "file",
+  "statics.js" : "file",
+  "watch.js"   : "file"
   },
   "Gruntfile.js" : "file",
   "app.jscsrc.json" : "file",
   "app.jshintrc.json" : "file",
-  "manifest.json" : "file",
+  "package.json" : "file",
   "config" : {
-	"00_base.json" : "file",
-	"99_dev.json"  : "file"
+    "00_base.json" : "file",
+    "01_panels.json" : "file",
+    "99_dev.json"  : "file"
   }
 }

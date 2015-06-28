@@ -1,0 +1,16 @@
+{
+  "undef": true,
+  "browser":true,
+  "sub": true,
+  "devel": true,
+  "evil": true,
+  "laxbreak": true,
+  "multistr": true,
+  "mootools": true,
+  "jquery" : true,
+  "predef": [
+      "jQuery", "$",
+      "Mustache",
+      "RLM"
+  ]
+}
