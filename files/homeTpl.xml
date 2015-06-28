@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mustache>
+  <script type="text/template" id="home_screen">
+    <div>
+      <div>Home panel works!</div>
+    </div>
+  </script>
+</mustache>

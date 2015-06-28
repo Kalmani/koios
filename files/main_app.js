@@ -118,5 +118,22 @@ var Main = new Class ({
       this.SCS.register(new HomeScreen(this, this.default_page));
       this.SCS.screens_list[this.default_page].show_login_panel();
     }
+  },
+
+  make_nav : function() {
+    var context = {},
+        that = this,
+        navigation = new Array();
+    Object.each(that.config.panels, function(className, id) {
+      var link = this.SCS.register(new window[className](this, id));
+      if (link !== false) {
+        navigation[navigation.length] = {'id' : id, 'actif' : !!(that.current_screen == id)};
+      }
+    }.bind(this));
+    /*context.navigation = navigation;
+    var dom = that.render('main_nav', context).inject(document.id('main_nav'));
+    $('.nav_link').click(function() {
+      that.SCS.switchRubric(this.get('id'));
+    });*/
   }
 });

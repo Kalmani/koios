@@ -4,12 +4,14 @@ require('mootools');
 var fs = require('fs-extra'),
     Aliases = require('./class/aliases.js'),
     path = require('path'),
-    prompt = require('prompt');
+    prompt = require('prompt'),
+    exec = require('child_process').exec;
 
 var Koios = new Class({
 
   Binds : [
     'project',
+    'initialize_project',
     'reset_project',
     'clear_dir'
   ],
@@ -44,13 +46,11 @@ var Koios = new Class({
   project : function() {
     var self = this,
         sub_cmd = self.arg || 'initialize',
-        tmp_architecture = Object.clone(self.architecture),
         cmd = self.alias.get(sub_cmd);
 
     switch (cmd) {
       case 'initialize' :
-        console.info('Init project');
-        self.dive_arch(tmp_architecture, './');
+        self.initialize_project();
         break;
       case 'reset' :
         self.reset_project();
@@ -73,6 +73,16 @@ var Koios = new Class({
     }
   },
 
+  initialize_project : function() {
+    var self = this;
+
+    console.info('Init project');
+    // create dir / files architecture
+    tmp_architecture = Object.clone(self.architecture),
+    self.dive_arch(tmp_architecture, './');
+    self.npm_install(self.grunt_tasks);
+  },
+
   reset_project : function() {
     var self = this;
     self.ask(self.CONFIRM_DELETE, function(err, response) {
@@ -81,6 +91,7 @@ var Koios = new Class({
         var tmp_architecture = Object.clone(self.architecture);
         self.dive_arch(tmp_architecture, './');
         console.log('Project has been reset');
+        self.npm_install(self.grunt_tasks);
       }
     });
   },
@@ -93,9 +104,7 @@ var Koios = new Class({
         console.log('Your project has been deleted !');
         self.ask(self.CONFIRM_REINIT, function(err, response) {
           if (self.valid_promp_responses.indexOf(response[self.CONFIRM_REINIT]) !== -1) {
-            var tmp_architecture = Object.clone(self.architecture);
-            self.dive_arch(tmp_architecture, './');
-            console.log('Project has been initialize');
+            self.initialize_project();
           }
         });
       }
@@ -128,14 +137,46 @@ var Koios = new Class({
   dive_arch : function(architecture, parent) {
     var self = this;
     Object.each(architecture, function(sub, folder) {;
-      if (sub !== 'file') {
-        self.mkdirSync(parent + folder);
-        tmp_parent = parent + folder + '/';
-        self.dive_arch(sub, tmp_parent);
-      } else {
+      if (sub === 'file') {
         fs.copy(__dirname + '/files/' + folder, parent + '/' + folder, function (err) {
           if (err) return console.error(err)
         });
+      } else if (sub == 'library') {
+        console.log('copying library', folder, 'in', parent);
+        self.copy_library(folder, parent);
+      } else {
+        self.mkdirSync(parent + folder);
+        tmp_parent = parent + folder + '/';
+        self.dive_arch(sub, tmp_parent);
+      }
+    });
+  },
+
+  copy_library : function(name, path) {
+    fs.copy(__dirname + '/libraries/' + name, path + name, function (err) {
+      if (err) return console.error('failed to copy library ' + name);
+    });
+  },
+
+  npm_install : function(callback) {
+    // init node modules
+    console.info('Downloading npm dependencies...');
+    exec("npm install", function (error, stdout, stderr) {
+      if (error !== null) {
+        console.log('exec error: ' + error);
+      } else {
+        console.log('Dependencies has been installed');
+        callback();
+      }
+    });
+  },
+
+  grunt_tasks : function() {
+    exec("grunt", function (error, stdout, stderr) {
+      if (error !== null) {
+        console.log('exec error: ' + error);
+      } else {
+        console.log('ok');
       }
     });
   },

@@ -1,0 +1,23 @@
+{
+  "dev_mode" : true,
+  "default_tasks" : {
+    "concat" : true,
+    "jshint" : true,
+    "jscs"  : false
+  },
+
+  "statics" : [
+  ],
+
+  "files": {
+    "www/vendor/**/**.js":{"jshint" : false},
+    "www/app/globales/session.js":{"jshint" : false},
+    "www/app/globales/ScreenManager.js":{"jshint" : false},
+
+    "www/app/components/home/homeScreen.js":{"jshint":false},
+
+    "www/app/main_app.js":{"jshint" : false},
+
+    "www/app/init.js":{"jshint" : false}
+  }
+}
