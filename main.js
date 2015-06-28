@@ -2,12 +2,15 @@
 
 require('mootools');
 var fs = require('fs-extra'),
+    Aliases = require('./class/aliases.js'),
     path = require('path'),
     prompt = require('prompt');
 
 var Koios = new Class({
 
   Binds : [
+    'project',
+    'reset_project',
     'clear_dir'
   ],
 
@@ -16,9 +19,16 @@ var Koios = new Class({
   ],
 
   CONFIRM_DELETE : "You are about to erease all your projects' files, do you want to continue ? [Y/n]",
+  CONFIRM_DELETE_PROJECT : "Are you sure you want to delete all your project ? [Y/n]",
+  CONFIRM_REINIT : "Do you want to init your project again ? [Y/n]",
+
 
   initialize : function() {
     var self = this;
+
+    self.alias = new Aliases(),
+
+    self.architecture = JSON.parse(fs.readFileSync(__dirname + '/architecture.json'));
 
     self.cli_args = process.argv.splice(2);
 
@@ -33,41 +43,85 @@ var Koios = new Class({
 
   project : function() {
     var self = this,
-        sub_cmd = self.arg || 'init',
-        architecture = JSON.parse(fs.readFileSync(__dirname + '/architecture.json'));
+        sub_cmd = self.arg || 'initialize',
+        tmp_architecture = Object.clone(self.architecture),
+        cmd = self.alias.get(sub_cmd);
 
-    switch (sub_cmd) {
-      case 'init' :
-      default :
+    switch (cmd) {
+      case 'initialize' :
         console.info('Init project');
-        self.dive_arch(architecture, './');
+        self.dive_arch(tmp_architecture, './');
         break;
       case 'reset' :
-        self.ask(self.CONFIRM_DELETE, function(err, response) {
-          if (self.valid_promp_responses.indexOf(response[self.CONFIRM_DELETE]) !== -1) {
-            var first_directories = Object.keys(architecture);
-            Array.each(first_directories, function(path) {
-              self.clear_dir(path)
-            });
-            self.dive_arch(architecture, './');
-            console.log('Project has been reset');
+        self.reset_project();
+        break;
+      case 'delete' :
+        self.delete_project();
+        break;
+      case 'add_component' :
+        console.log('addexisting / create generic component');
+        break;
+      case 'add_library' :
+        console.log('add library');
+        break;
+      case '--help':
+        console.log('show cmds');
+        break;
+      default :
+        console.error('Invalid command madafaka!');
+        break;
+    }
+  },
+
+  reset_project : function() {
+    var self = this;
+    self.ask(self.CONFIRM_DELETE, function(err, response) {
+      if (self.valid_promp_responses.indexOf(response[self.CONFIRM_DELETE]) !== -1) {
+        self.clear_dir();
+        var tmp_architecture = Object.clone(self.architecture);
+        self.dive_arch(tmp_architecture, './');
+        console.log('Project has been reset');
+      }
+    });
+  },
+
+  delete_project : function() {
+    var self = this;
+    self.ask(self.CONFIRM_DELETE_PROJECT, function(err, response) {
+      if (self.valid_promp_responses.indexOf(response[self.CONFIRM_DELETE_PROJECT]) !== -1) {
+        self.clear_dir();
+        console.log('Your project has been deleted !');
+        self.ask(self.CONFIRM_REINIT, function(err, response) {
+          if (self.valid_promp_responses.indexOf(response[self.CONFIRM_REINIT]) !== -1) {
+            var tmp_architecture = Object.clone(self.architecture);
+            self.dive_arch(tmp_architecture, './');
+            console.log('Project has been initialize');
           }
         });
-    }
+      }
+    });
   },
 
   clear_dir : function(path) {
     var self = this;
+    if (!path)
+      path = '.';
+
     if(fs.existsSync(path)) {
-      Object.each(fs.readdirSync(path), function(file) {
-        var curPath = path + "/" + file;
-        if(fs.lstatSync(curPath).isDirectory()) {
-          self.clear_dir(curPath);
-        } else {
-          fs.unlinkSync(curPath);
-        }
-      });
-      fs.rmdirSync(path);
+      if (fs.lstatSync(path).isDirectory()) {
+        Object.each(fs.readdirSync(path), function(file) {
+          var curPath = path + "/" + file;
+          if(fs.lstatSync(curPath).isDirectory()) {
+            self.clear_dir(curPath);
+          } else {
+            fs.unlinkSync(curPath);
+          }
+        });
+        if (path !== '.')
+          fs.rmdirSync(path);
+      } else {
+        fs.unlinkSync(path);
+      }
     }
   },
 
